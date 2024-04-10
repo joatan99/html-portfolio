@@ -531,23 +531,23 @@
                     });
 
                     // Scroll
-                    // var scrollTop = $(window).scrollTop(),
-                    //     $anchor = $(this).find('a'),
-                    //     $section = $($anchor.attr('href')).offset().top,
-                    //     $window = $(window).width(),
-                    //     $minusDesktop = getNav.data("minus-value-desktop"),
-                    //     $minusMobile = getNav.data("minus-value-mobile"),
-                    //     $speed = getNav.data("speed");
+                    var scrollTop = $(window).scrollTop(),
+                        $anchor = $(this).find('a'),
+                        $section = $($anchor.attr('href')).offset().top,
+                        $window = $(window).width(),
+                        $minusDesktop = getNav.data("minus-value-desktop"),
+                        $minusMobile = getNav.data("minus-value-mobile"),
+                        $speed = getNav.data("speed");
                     
-                    // if( $window > 992 ){
-                    //     var $position = $section - $minusDesktop;
-                    // }else{
-                    //     var $position = $section - $minusMobile;
-                    // }             
+                    if( $window > 992 ){
+                        var $position = $section - $minusDesktop;
+                    }else{
+                        var $position = $section - $minusMobile;
+                    }             
                         
-                    // $('html, body').stop().animate({
-                    //     scrollTop: $position
-                    // }, $speed);
+                    $('html, body').stop().animate({
+                        scrollTop: $position
+                    }, $speed);
                 });
                 
                 // Activate Navigation
