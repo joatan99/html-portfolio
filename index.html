@@ -998,6 +998,26 @@
             padding-top: 4rem;       /* slightly tighter join */
           }
         }
+
+        /* --- Mobile hero fixes --- */
+        .hero h1 {
+            /* ensure long tokens wrap even if the browser treats it as one word */
+            overflow-wrap: anywhere;
+            word-break: normal;
+        }
+
+        @media (max-width: 768px) {
+            /* kill any transforms left by animations/parallax so layout lines up cleanly */
+            .hero-content,
+            .hero-illustration {
+                transform: none !important;
+            }
+
+            /* slightly smaller, more comfortable mobile heading */
+            .hero h1 { font-size: clamp(2rem, 7vw, 2.6rem); }
+            .hero p  { font-size: 1rem; line-height: 1.7; }
+        }
+
     </style>
 </head>
 <body>
@@ -1461,22 +1481,49 @@
         });
 
         // Dynamic typing effect for hero title
-        const heroTitle = document.querySelector('.hero h1 span:last-child');
-        if (heroTitle) {
-            const text = "I love building products!";
-            heroTitle.innerText = '';
-            let index = 0;
+        // const heroTitle = document.querySelector('.hero h1 span:last-child');
+        // if (heroTitle) {
+        //     const text = "I love building products!";
+        //     heroTitle.innerText = '';
+        //     let index = 0;
             
-            const typeWriter = () => {
-                if (index < text.length) {
-                    heroTitle.innerText += text.charAt(index);
-                    index++;
-                    setTimeout(typeWriter, 50);
-                }
+        //     const typeWriter = () => {
+        //         if (index < text.length) {
+        //             heroTitle.innerText += text.charAt(index);
+        //             index++;
+        //             setTimeout(typeWriter, 50);
+        //         }
+        //     };
+            
+        //     setTimeout(typeWriter, 1000);
+        // }
+
+        // Dynamic typing effect (disabled on small screens & reduced-motion)
+        (() => {
+            const el = document.querySelector('.hero h1 span:last-child');
+            if (!el) return;
+
+            const FULL_TEXT = "I love building products!";
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const smallScreen = window.matchMedia('(max-width: 480px)').matches;
+
+            // On phones or when user prefers reduced motion: show static text (no glitchy typing)
+            if (prefersReduced || smallScreen) {
+                el.textContent = FULL_TEXT;
+                return;
+            }
+
+            // Typing on larger screens
+            el.textContent = '';
+            let i = 0;
+            const speed = 50;
+            const tick = () => {
+                el.textContent += FULL_TEXT[i++];
+                if (i < FULL_TEXT.length) setTimeout(tick, speed);
             };
-            
-            setTimeout(typeWriter, 1000);
-        }
+            setTimeout(tick, 600);
+        })();
+
     </script>
 </body>
 </html>
