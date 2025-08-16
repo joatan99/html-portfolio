@@ -6,7 +6,6 @@
     <title>Joachim Tan</title>
     
     <!-- Favicon -->
-    <!-- <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%236366f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-size='14' font-weight='bold'%3EJT%3C/text%3E%3C/svg%3E" -->
     <link rel="icon" type="image/svg+xml" href="">
     <script>
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
@@ -33,8 +32,6 @@
     </svg>`;
     document.querySelector("link[rel='icon']").href = "data:image/svg+xml," + encodeURIComponent(svg);
     </script>
-    
-
     
     <style>
         * {
@@ -395,12 +392,10 @@
 
         .project-image img{
             width:100%;
-            height:220px;      /* matches your .project-image height */
-            object-fit:cover;  /* crop nicely */
+            height:220px;
+            object-fit:cover;
             display:block;
         }
-
-        /* .project-image--kaiva img { object-position: 100% center; } */
 
         .project-content {
             padding: 1.5rem;
@@ -935,6 +930,85 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #5558e3;
         }
+
+        /* ============================== */
+        /* APPENDED: responsive upgrades  */
+        /* ============================== */
+
+        :root{ --header-h: 72px; }
+
+        .container{
+          width: min(100%, 1200px);
+          padding-inline: clamp(1rem, 3vw, 2rem);
+        }
+
+        /* iOS small-viewport fix + scaling */
+        .hero{ min-height: 100svh; padding-top: var(--header-h); }
+        .person-illustration{ width: clamp(260px, 80vw, 400px); height: auto; }
+
+        .project-image{ height: clamp(160px, 26vw, 220px); }
+        .project-image img{ height: 100%; }
+
+        @media (max-width: 1024px){ .stats-grid{ grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px){ .stats-grid{ grid-template-columns: 1fr; } }
+
+        .projects-grid{ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+        @media (max-width: 840px){ .skills-grid{ grid-template-columns: 1fr; } }
+
+        .map-section{ min-height: clamp(320px, 45vh, 600px); }
+        .address-overlay{ left: 16px; bottom: 16px; padding: 16px; border-radius: 12px; }
+
+        .call-button{
+          bottom: max(20px, env(safe-area-inset-bottom));
+          right:  max(20px, env(safe-area-inset-right));
+        }
+
+        /* Mobile nav toggle */
+        .menu-toggle{
+          display: none;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid var(--border-color);
+          color: var(--primary-color);
+          border-radius: 10px;
+          padding: .5rem .75rem;
+          font-size: 1rem;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        @media (max-width: 768px){
+          .menu-toggle{ display: inline-flex; align-items:center; gap:.5rem; }
+          nav{ gap: .75rem; }
+
+          .nav-links{
+            position: fixed;
+            top: var(--header-h);
+            right: 0;
+            left: 0;
+            display: none; /* hidden by default */
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem clamp(1rem, 3vw, 2rem);
+            background: rgba(15,20,25,0.98);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,.4);
+          }
+          .nav-links.open{ display: flex; }
+
+          .nav-links a{ font-size: 1rem; }
+
+          .hero{ padding-top: calc(var(--header-h) + 6px); }
+          .container{ padding-inline: 1rem; }
+        }
+
+        /* Respect reduced-motion */
+        @media (prefers-reduced-motion: reduce){
+          *, *::before, *::after{ animation: none !important; transition: none !important; }
+        }
+
+        /* Tiny screens: hide call button if it overlaps */
+        @media (max-width: 360px){ .call-button{ display:none; } }
     </style>
 </head>
 <body>
@@ -943,7 +1017,11 @@
         <div class="container">
             <nav>
                 <a href="#" class="logo">Joachim Tan</a>
-                <ul class="nav-links">
+
+                <!-- Mobile menu toggle -->
+                <button class="menu-toggle" aria-label="Open menu" aria-controls="nav-links" aria-expanded="false">☰</button>
+
+                <ul class="nav-links" id="nav-links">
                     <li><a href="#experience">Experience</a></li>
                     <li><a href="#skills">Skills</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
@@ -1033,27 +1111,23 @@
                         <div class="stat-label">Products Shipped</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">100000</div>
+                        <div class="stat-number">100,000</div>
                         <div class="stat-label">Users Impacted</div>
                     </div>
                 </div>
             </div>
 
             <!-- Projects within Experience -->
-             
-            <!-- TCG Unite card  -->
             <div class="projects-wrapper">
-                <!-- <h3>Featured Projects</h3> -->
                 <div class="projects-grid">
                     <div class="project-card">
                         <div class="project-image">
                             <!-- TCG Unite -->
-                            <img src="assets/images/tcgunite_cover.png" alt="TCG Unite Platform">
+                            <img src="assets/images/tcgunite_cover.png" alt="TCG Unite Platform" loading="lazy">
                         </div>
                         <div class="project-content">
                             <h3 class="project-title">TCG Unite Platform</h3>
                             <p class="project-desc">Building a comprehensive platform for trading card game enthusiasts to connect, trade, and manage collections. Currently in active development as founder.</p>
-                            <!-- <a href="https://www.tcgunite.co/" class="project-link">View Project →</a> -->
                             <a href="https://www.tcgunite.co/" class="project-link">View Case Study →</a>
                         </div>
                     </div>
@@ -1084,8 +1158,7 @@
                     <!-- ExxonMobil card  -->
                     <div class="project-card">
                         <div class="project-image">
-                            <!-- Mobile App Platform -->
-                            <img src="assets/images/exxon_cover.png" alt="ExxonMobil Rewards Mobile App"> 
+                            <img src="assets/images/exxon_cover.png" alt="ExxonMobil Rewards Mobile App" loading="lazy"> 
                         </div>
                         <div class="project-content">
                             <h3 class="project-title">ExxonMobil Rewards Mobile App</h3>
@@ -1097,13 +1170,11 @@
                     <!-- Kaiva card  -->
                     <div class="project-card">
                         <div class="project-image">
-                            <!-- E-commerce for Artists -->
-                            <img src="assets/images/kaiva_cover.png" alt="Kaiva — E-commerce for Artists">
+                            <img src="assets/images/kaiva_cover.png" alt="Kaiva — E-commerce for Artists" loading="lazy">
                         </div>
                         <div class="project-content">
                             <h3 class="project-title">Kaiva: E-commerce for Independent Artists</h3>
                             <p class="project-desc">Built an e-commerce marketplace that connects independent artists with buyers—creator onboarding, storefronts, commissions, checkout, and order tracking. Bootstrapped growth and enabled artists to sell directly to interested buyers on one platform.</p>
-                            <!-- <a href="#" class="project-link">View Case Study →</a> -->
                             <a href="kaiva-case-study.html" class="project-link">View Case Study →</a>
                         </div>
                     </div>
@@ -1321,19 +1392,51 @@
             }
         });
 
-        // Parallax effect for hero section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroContent = document.querySelector('.hero-content');
-            const heroIllustration = document.querySelector('.hero-illustration');
-            
-            if (heroContent && window.innerWidth > 768) {
-                heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+        // ===== Mobile menu toggle =====
+        const menuBtn = document.querySelector('.menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        if (menuBtn && navLinks){
+          menuBtn.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', String(isOpen));
+            menuBtn.textContent = isOpen ? '✕' : '☰';
+          });
+
+          // Close on link click (better UX)
+          navLinks.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+              navLinks.classList.remove('open');
+              menuBtn.setAttribute('aria-expanded', 'false');
+              menuBtn.textContent = '☰';
+            });
+          });
+
+          // Close on Escape
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape'){
+              navLinks.classList.remove('open');
+              menuBtn.setAttribute('aria-expanded', 'false');
+              menuBtn.textContent = '☰';
             }
-            if (heroIllustration && window.innerWidth > 768) {
-                heroIllustration.style.transform = `translateY(${scrolled * 0.2}px)`;
-            }
-        });
+          });
+        }
+
+        // ===== Parallax (disabled on phones) =====
+        const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
+        let parallaxEnabled = !isPhone();
+
+        const parallaxHandler = () => {
+          if (!parallaxEnabled) return;
+          const scrolled = window.pageYOffset;
+          const heroContent = document.querySelector('.hero-content');
+          const heroIllustration = document.querySelector('.hero-illustration');
+          if (heroContent) heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+          if (heroIllustration) heroIllustration.style.transform = `translateY(${scrolled * 0.2}px)`;
+        };
+
+        window.addEventListener('scroll', parallaxHandler, { passive: true });
+        window.addEventListener('resize', () => { parallaxEnabled = !isPhone(); });
 
         // Form submission handler
         document.querySelector('.contact-form').addEventListener('submit', function(e) {
@@ -1345,7 +1448,6 @@
             const message = document.getElementById('message').value;
             
             // Here you would normally send the form data to a server
-            // For now, we'll just show an alert
             alert(`Thank you for your message, ${name}! I'll get back to you at ${email} soon.`);
             
             // Reset form
@@ -1357,7 +1459,7 @@
         const animateStats = () => {
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => {
-                const target = parseFloat(stat.innerText);
+                const target = parseFloat(stat.innerText.replace(/,/g,''));
                 const duration = 2000;
                 const increment = target / (duration / 16);
                 let current = 0;
@@ -1365,10 +1467,10 @@
                 const updateNumber = () => {
                     current += increment;
                     if (current < target) {
-                        stat.innerText = Math.floor(current);
+                        stat.innerText = Math.floor(current).toLocaleString();
                         requestAnimationFrame(updateNumber);
                     } else {
-                        stat.innerText = target;
+                        stat.innerText = target.toLocaleString();
                     }
                 };
                 
@@ -1417,7 +1519,6 @@
                 }
             };
             
-            // Start typing after a short delay
             setTimeout(typeWriter, 1000);
         }
     </script>
