@@ -1018,6 +1018,61 @@
             .hero p  { font-size: 1rem; line-height: 1.7; }
         }
 
+        /* === HERO: stable ordering + no overflow on mobile === */
+        .hero,
+        .illustration-wrapper { overflow: hidden; }
+
+        /* Use grid areas instead of order so placement is guaranteed */
+        .hero-wrapper {
+            grid-template-areas: "content illus";
+        }
+        .hero-content { grid-area: content; }
+        .hero-illustration { grid-area: illus; }
+
+        /* Keep the SVG inside the viewport on phones */
+        .person-illustration {
+            width: min(92vw, 460px);
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Mobile/tablet: image first, centered layout, no transforms */
+        @media (max-width: 968px) {
+        .hero {
+            text-align: center;
+            padding: 96px 0 48px;
+            min-height: auto; /* don’t force full-screen height */
+        }
+
+        .hero-wrapper {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+            "illus"
+            "content";
+            place-items: center;
+            justify-items: center;
+            gap: 2rem;
+        }
+
+        /* cancel any transforms/orders from animations/parallax */
+        .hero-content,
+        .hero-illustration {
+            order: initial !important;
+            transform: none !important;
+        }
+
+        /* keep the decorative squares inside the viewport */
+        .floating-element.purple { right: 8px; }
+        .floating-element.blue   { left: 8px;  }
+        .floating-element.white  { right: 8px; }
+        }
+
+        /* Very small phones: remove the floating squares completely */
+        @media (max-width: 480px) {
+            .floating-element { display: none; }
+        }
+
+
     </style>
 </head>
 <body>
@@ -1091,6 +1146,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Experience Section with Projects -->
     <section class="experience" id="experience">
